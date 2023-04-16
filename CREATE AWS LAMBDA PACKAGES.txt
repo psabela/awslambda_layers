@@ -1,0 +1,47 @@
+docker run -v C:\projects:/lambda -it --rm ubuntu
+
+apt update && apt upgrade
+
+apt install build-essential zlib1g-dev \
+libncurses5-dev libgdbm-dev libnss3-dev \
+libssl-dev libreadline-dev libffi-dev curl software-properties-common
+
+apt install wget
+
+wget https://www.python.org/ftp/python/3.9.0/Python-3.9.0.tar.xz
+
+tar -xf Python-3.9.0.tar.xz
+
+cd Python-3.9.0
+
+./configure
+
+make altinstall
+
+apt install python3-virtualenv
+
+virtualenv aws39 --python="/usr/local/bin/python3.9"
+
+source aws39/bin/activate
+
+python --version  
+
+apt install python3-pip
+
+python3 -m pip install --upgrade pip
+
+apt-get install -y libssl-dev libffi-dev
+
+mkdir -p lambda_layers/python/lib/python3.9/site-packages
+
+cd lambda_layers/python/lib/python3.9/site-packages
+
+pip install -r https://raw.githubusercontent.com/snowflakedb/snowflake-connector-python/main/tested_requirements/requirements_39.reqs -t .
+
+pip install snowflake-connector-python==3.0.2 -t .
+
+cd ~/lambda_layers
+
+apt install zip
+
+zip -r snowflake_lambda_layer.zip *
